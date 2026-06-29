@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estudio de Tiempos · Cálculo Tiempo Estándar</title>
+    <!-- Tailwind CSS + Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      .table-scroll {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #cbd5e1 #f1f5f9;
+      }
+      .table-scroll::-webkit-scrollbar {
+        height: 6px;
+      }
+      .table-scroll::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 8px;
+      }
+      .table-scroll::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 8px;
+      }
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 min-h-screen p-4 md:p-6 lg:p-8"
+  >
+    <div class="max-w-7xl mx-auto">
+      <!-- ========== HEADER ========== -->
+      <div
+        class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4"
+      >
+        <div class="flex items-center gap-3">
+          <div class="bg-blue-600 rounded-xl p-2.5 shadow-lg shadow-blue-200">
+            <i
+              data-lucide="stopwatch"
+              class="w-6 h-6 md:w-7 md:h-7 text-white"
+            ></i>
+          </div>
+          <div>
+            <h1
+              class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent"
+            >
+              Estudio de Tiempos
+            </h1>
+            <p class="text-xs md:text-sm text-slate-500 font-medium">
+              Cálculo de Tiempo Estándar con Cronómetro
+            </p>
+          </div>
+        </div>
+        <!-- Suplementos editable -->
+        <div
+          class="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-4 py-2 shadow-sm"
+        >
+          <i data-lucide="percent" class="w-4 h-4 text-amber-600"></i>
+          <label class="text-sm font-semibold text-slate-700 whitespace-nowrap"
+            >Suplementos (%):</label
+          >
+          <input
+            id="suplementoInput"
+            type="number"
+            value="14"
+            min="0"
+            max="100"
+            step="0.5"
+            class="w-20 border border-slate-300 rounded-lg px-2 py-1 text-center text-sm font-bold text-amber-700 focus:ring-2 focus:ring-amber-500 outline-none transition"
+            oninput="calcular()"
+          />
+        </div>
+      </div>
+
+      <!-- ========== TARJETA PRINCIPAL ========== -->
+      <div
+        class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden"
+      >
+        <!-- Barra superior de la tarjeta -->
+        <div
+          class="bg-gradient-to-r from-slate-50 to-blue-50 border-b border-slate-200 px-5 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2"
+        >
+          <p class="text-sm text-slate-600 flex items-center gap-1.5">
+            <i data-lucide="info" class="w-4 h-4 text-blue-500"></i>
+            Ingresá las observaciones separadas por
+            <code
+              class="bg-slate-200 px-1.5 py-0.5 rounded text-xs font-mono text-slate-700"
+              >comas</code
+            >
+          </p>
+          <div class="flex gap-2">
+            <button
+              onclick="agregarFila()"
+              class="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-md shadow-blue-200 hover:shadow-lg hover:shadow-blue-300"
+            >
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              Agregar Elemento
+            </button>
+            <button
+              onclick="calcular()"
+              class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-md shadow-emerald-200 hover:shadow-lg hover:shadow-emerald-300"
+            >
+              <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+              Calcular Todo
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabla con scroll horizontal -->
+        <div class="table-scroll overflow-x-auto">
+          <table class="w-full min-w-[900px] text-sm">
+            <thead>
+              <tr
+                class="bg-slate-100 text-slate-600 text-xs uppercase tracking-wider font-semibold"
+              >
+                <th class="p-3 text-center w-20">Elemento</th>
+                <th class="p-3 text-center w-24">Valoración (%)</th>
+                <th class="p-3 text-center min-w-[250px]">Observaciones</th>
+                <th class="p-3 text-center w-24">Promedio</th>
+                <th class="p-3 text-center w-28">Tiempo Normal</th>
+                <th class="p-3 text-center w-28">Suplementos</th>
+                <th class="p-3 text-center w-28">Tiempo Estándar</th>
+                <th class="p-3 text-center w-20">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="filas-elementos">
+              <!-- Fila a (precargada) -->
+              <tr
+                class="border-b border-slate-100 hover:bg-slate-50/50 transition"
+              >
+                <td class="p-2">
+                  <input
+                    type="text"
+                    value="a"
+                    class="elemento w-full border border-slate-300 rounded-lg px-3 py-2 text-center font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  />
+                </td>
+                <td class="p-2">
+                  <input
+                    type="number"
+                    value="95"
+                    class="valoracion w-full border border-slate-300 rounded-lg px-3 py-2 text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  />
+                </td>
+                <td class="p-2">
+                  <input
+                    type="text"
+                    value="2, 3, 6, 3, 3, 4, 4, 2, 4, 5"
+                    class="observaciones w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition font-mono text-xs"
+                  />
+                </td>
+                <td class="promedio p-2 text-center font-medium text-slate-800">
+                  -
+                </td>
+                <td class="t-normal p-2 text-center font-medium text-blue-700">
+                  -
+                </td>
+                <td
+                  class="suplemento p-2 text-center font-medium text-amber-700"
+                >
+                  -
+                </td>
+                <td
+                  class="t-estandar p-2 text-center font-bold text-emerald-700"
+                >
+                  -
+                </td>
+                <td class="p-2 text-center">
+                  <button
+                    onclick="eliminarFila(this)"
+                    class="inline-flex items-center justify-center bg-rose-100 hover:bg-rose-200 text-rose-600 rounded-lg p-2 transition"
+                    title="Eliminar fila"
+                  >
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  </button>
+                </td>
+              </tr>
+              <!-- Fila b (precargada) -->
+              <tr
+                class="border-b border-slate-100 hover:bg-slate-50/50 transition"
+              >
+                <td class="p-2">
+                  <input
+                    type="text"
+                    value="b"
+                    class="elemento w-full border border-slate-300 rounded-lg px-3 py-2 text-center font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  />
+                </td>
+                <td class="p-2">
+                  <input
+                    type="number"
+                    value="100"
+                    class="valoracion w-full border border-slate-300 rounded-lg px-3 py-2 text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  />
+                </td>
+                <td class="p-2">
+                  <input
+                    type="text"
+                    value="12, 11, 13, 15, 9, 12, 10, 12, 13, 14"
+                    class="observaciones w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition font-mono text-xs"
+                  />
+                </td>
+                <td class="promedio p-2 text-center font-medium text-slate-800">
+                  -
+                </td>
+                <td class="t-normal p-2 text-center font-medium text-blue-700">
+                  -
+                </td>
+                <td
+                  class="suplemento p-2 text-center font-medium text-amber-700"
+                >
+                  -
+                </td>
+                <td
+                  class="t-estandar p-2 text-center font-bold text-emerald-700"
+                >
+                  -
+                </td>
+                <td class="p-2 text-center">
+                  <button
+                    onclick="eliminarFila(this)"
+                    class="inline-flex items-center justify-center bg-rose-100 hover:bg-rose-200 text-rose-600 rounded-lg p-2 transition"
+                    title="Eliminar fila"
+                  >
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer con totales -->
+        <div
+          class="bg-gradient-to-r from-slate-100 to-blue-50 border-t border-slate-200 px-5 py-4"
+        >
+          <div
+            class="flex flex-col sm:flex-row items-end justify-end gap-4 sm:gap-8"
+          >
+            <div
+              class="flex items-center gap-3 bg-white rounded-xl px-5 py-3 shadow-sm border border-slate-200"
+            >
+              <span class="text-sm font-semibold text-slate-600"
+                >Total Tiempo Normal:</span
+              >
+              <span id="total-normal" class="text-lg font-bold text-blue-700"
+                >-</span
+              >
+            </div>
+            <div
+              class="flex items-center gap-3 bg-white rounded-xl px-5 py-3 shadow-sm border border-emerald-200"
+            >
+              <span class="text-sm font-semibold text-slate-600"
+                >Total Tiempo Estándar:</span
+              >
+              <span
+                id="total-estandar"
+                class="text-lg font-bold text-emerald-700"
+                >-</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer informativo -->
+      <div
+        class="mt-5 text-center text-xs text-slate-400 flex items-center justify-center gap-1"
+      >
+        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+        Cálculos basados en fórmula estándar de ingeniería industrial ·
+        Suplementos configurables
+      </div>
+    </div>
+
+    <script>
+      function agregarFila() {
+        const tbody = document.getElementById("filas-elementos");
+        const nuevaFila = document.createElement("tr");
+        nuevaFila.className =
+          "border-b border-slate-100 hover:bg-slate-50/50 transition";
+
+        nuevaFila.innerHTML = `
+                <td class="p-2">
+                    <input type="text" placeholder="ej. c" 
+                        class="elemento w-full border border-slate-300 rounded-lg px-3 py-2 text-center font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </td>
+                <td class="p-2">
+                    <input type="number" placeholder="100" value="100"
+                        class="valoracion w-full border border-slate-300 rounded-lg px-3 py-2 text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </td>
+                <td class="p-2">
+                    <input type="text" placeholder="10, 12, 11" 
+                        class="observaciones w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition font-mono text-xs">
+                </td>
+                <td class="promedio p-2 text-center font-medium text-slate-800">-</td>
+                <td class="t-normal p-2 text-center font-medium text-blue-700">-</td>
+                <td class="suplemento p-2 text-center font-medium text-amber-700">-</td>
+                <td class="t-estandar p-2 text-center font-bold text-emerald-700">-</td>
+                <td class="p-2 text-center">
+                    <button onclick="eliminarFila(this)" 
+                        class="inline-flex items-center justify-center bg-rose-100 hover:bg-rose-200 text-rose-600 rounded-lg p-2 transition" title="Eliminar fila">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </td>
+            `;
+        tbody.appendChild(nuevaFila);
+        lucide.createIcons();
+        calcular();
+      }
+
+      function eliminarFila(boton) {
+        const fila = boton.closest("tr");
+        fila.remove();
+        calcular();
+      }
+
+      function calcular() {
+        // Obtener suplemento configurable (%)
+        const suplementoInput = document.getElementById("suplementoInput");
+        const suplementoPorcentaje = parseFloat(suplementoInput.value) || 0;
+        const factorSuplemento = suplementoPorcentaje / 100;
+
+        const filas = document.querySelectorAll("#filas-elementos tr");
+        let sumaTotalNormal = 0;
+        let sumaTotalEstandar = 0;
+
+        filas.forEach((fila) => {
+          const valoracionInput = fila.querySelector(".valoracion").value;
+          const observacionesInput = fila.querySelector(".observaciones").value;
+
+          const valoracion = parseFloat(valoracionInput) || 0;
+
+          const observaciones = observacionesInput
+            .split(",")
+            .map((num) => parseFloat(num.trim()))
+            .filter((num) => !isNaN(num));
+
+          if (observaciones.length > 0) {
+            const sumaObs = observaciones.reduce((a, b) => a + b, 0);
+            const promedio = sumaObs / observaciones.length;
+
+            const tiempoNormal = promedio * (valoracion / 100);
+            const suplemento = tiempoNormal * factorSuplemento;
+            const tiempoEstandar = tiempoNormal + suplemento;
+
+            sumaTotalNormal += tiempoNormal;
+            sumaTotalEstandar += tiempoEstandar;
+
+            fila.querySelector(".promedio").innerText = parseFloat(
+              promedio.toFixed(4),
+            ).toString();
+            fila.querySelector(".t-normal").innerText = tiempoNormal.toFixed(4);
+            fila.querySelector(".suplemento").innerText = suplemento.toFixed(4);
+            fila.querySelector(".t-estandar").innerText =
+              tiempoEstandar.toFixed(4);
+          } else {
+            fila.querySelector(".promedio").innerText = "-";
+            fila.querySelector(".t-normal").innerText = "-";
+            fila.querySelector(".suplemento").innerText = "-";
+            fila.querySelector(".t-estandar").innerText = "-";
+          }
+        });
+
+        document.getElementById("total-normal").innerText =
+          sumaTotalNormal.toFixed(4);
+        document.getElementById("total-estandar").innerText =
+          sumaTotalEstandar.toFixed(4);
+      }
+
+      // Calcular al cargar la página
+      window.addEventListener("DOMContentLoaded", () => {
+        calcular();
+        lucide.createIcons();
+      });
+    </script>
+  </body>
+</html>
