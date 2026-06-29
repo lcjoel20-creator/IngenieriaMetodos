@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Ingeniería de Métodos</title>
+
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      body {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+      }
+
+      .card {
+        transition: all 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-8px) scale(1.03);
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen flex flex-col">
+    <!-- Encabezado -->
+    <header class="bg-slate-900 shadow-lg">
+      <div
+        class="max-w-7xl mx-auto px-8 py-5 flex justify-between items-center"
+      >
+        <h1 class="text-3xl font-bold text-white">
+          Sistema de Ingeniería de Métodos
+        </h1>
+
+        <span class="text-slate-300"> Herramientas de Análisis </span>
+      </div>
+    </header>
+
+    <!-- Contenido -->
+    <main class="flex-1 flex items-center justify-center">
+      <div class="grid md:grid-cols-3 gap-10 p-10">
+        <!-- GRAFOS -->
+        <button
+          onclick="window.location.href = 'Grafos.html'"
+          class="card bg-white rounded-2xl shadow-xl p-10 w-80 hover:bg-blue-600 hover:text-white group"
+        >
+          <div class="flex justify-center mb-6">
+            <i data-lucide="network" class="w-16 h-16"></i>
+          </div>
+
+          <h2 class="text-2xl font-bold text-center mb-3">GRAFOS</h2>
+
+          <p class="text-center text-gray-500 group-hover:text-white">
+            Construcción y análisis de grafos, rutas críticas y redes de
+            proyectos.
+          </p>
+        </button>
+
+        <!-- TIEMPO ESTÁNDAR -->
+        <button
+          class="card bg-white rounded-2xl shadow-xl p-10 w-80 hover:bg-emerald-600 hover:text-white group"
+        >
+          <div class="flex justify-center mb-6">
+            <i data-lucide="timer" class="w-16 h-16"></i>
+          </div>
+
+          <h2 class="text-2xl font-bold text-center mb-3">TIEMPO ESTÁNDAR</h2>
+
+          <p class="text-center text-gray-500 group-hover:text-white">
+            Cálculo del tiempo normal, suplementos y tiempo estándar.
+          </p>
+        </button>
+
+        <!-- HOMBRE MÁQUINA -->
+        <button
+          class="card bg-white rounded-2xl shadow-xl p-10 w-80 hover:bg-orange-500 hover:text-white group"
+        >
+          <div class="flex justify-center mb-6">
+            <i data-lucide="factory" class="w-16 h-16"></i>
+          </div>
+
+          <h2 class="text-2xl font-bold text-center mb-3">
+            DIAGRAMA HOMBRE-MÁQUINA
+          </h2>
+
+          <p class="text-center text-gray-500 group-hover:text-white">
+            Elaboración y análisis del diagrama Hombre-Máquina para optimizar
+            procesos.
+          </p>
+        </button>
+      </div>
+    </main>
+
+    <!-- Pie -->
+    <footer class="bg-slate-900 text-center text-slate-400 py-4">
+      Ingeniería de Métodos © 2026
+    </footer>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
