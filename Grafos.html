@@ -2,241 +2,127 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Kruskal Mejorado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Ingeniería de Métodos</title>
+
+    <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-      canvas {
-        border: 1px solid #cbd5e1;
-        border-radius: 12px;
-        background: white;
+      body {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+      }
+
+      .card {
+        transition: all 0.35s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-10px) scale(1.03);
       }
     </style>
   </head>
-  <body class="bg-slate-100 p-4">
-    <div class="max-w-8xl mx-auto">
-      <button
-        onclick="window.location.href = 'index.html'"
-        class="mb-4 bg-slate-900 text-white px-4 py-2 rounded hover:bg-slate-700"
+
+  <body class="min-h-screen flex flex-col">
+    <!-- HEADER -->
+    <header class="bg-slate-900 shadow-lg">
+      <div
+        class="max-w-7xl mx-auto px-5 py-6 flex flex-col md:flex-row justify-between items-center gap-3"
       >
-        ← Volver al inicio
-      </button>
+        <div class="flex items-center gap-3">
+          <i data-lucide="graduation-cap" class="text-white w-10 h-10"></i>
 
-      <h1 class="text-4xl font-bold text-center mb-4">Kruskal MST y MaxST</h1>
-      <p class="text-center mb-4">
-        Nodos arrastrables. Área ampliada para grafos grandes.
-      </p>
-
-      <div class="grid lg:grid-cols-3 gap-4">
-        <div class="bg-white p-4 rounded shadow lg:col-span-1">
-          <input
-            id="nodeName"
-            class="border p-2 rounded w-full mb-2"
-            placeholder="Nodo"
-          />
-          <button
-            onclick="addNode()"
-            class="bg-blue-600 text-white px-3 py-2 rounded w-full"
+          <h1
+            class="text-2xl md:text-3xl font-bold text-white text-center md:text-left"
           >
-            Agregar Nodo
-          </button>
-          <div class="grid grid-cols-3 gap-2 mt-3">
-            <select id="fromNode" class="border p-2 rounded"></select>
-            <select id="toNode" class="border p-2 rounded"></select>
-            <input
-              id="weight"
-              type="number"
-              class="border p-2 rounded"
-              placeholder="Peso"
-            />
-          </div>
-          <div class="grid grid-cols-3 gap-2 mt-2">
-            <button
-              onclick="addEdge()"
-              class="bg-green-600 text-white py-2 rounded"
-            >
-              Arista
-            </button>
-            <button
-              onclick="calculateTrees()"
-              class="bg-purple-600 text-white py-2 rounded"
-            >
-              Calcular
-            </button>
-            <button
-              onclick="clearAll()"
-              class="bg-red-600 text-white py-2 rounded"
-            >
-              Limpiar
-            </button>
-          </div>
-          <div class="mt-4"><b>Nodos:</b> <span id="nodesList">-</span></div>
-          <ul id="edgesList" class="list-disc ml-5 mt-2"></ul>
+            Sistema de Ingeniería de Métodos
+          </h1>
         </div>
 
-        <div class="bg-white p-3 rounded shadow">
-          <h3 class="font-bold text-center mb-2">Original</h3>
-          <canvas id="graphCanvas" width="700" height="600"></canvas>
-        </div>
-
-        <div class="bg-white p-3 rounded shadow">
-          <h3 class="font-bold text-center mb-2">MST / MaxST</h3>
-          <canvas id="mstCanvas" width="700" height="280"></canvas>
-          <div id="mstInfo" class="mt-2"></div>
-          <canvas id="maxCanvas" width="700" height="280" class="mt-4"></canvas>
-          <div id="maxInfo" class="mt-2"></div>
-        </div>
+        <span class="text-slate-300 text-center md:text-right">
+          Herramientas de Análisis
+        </span>
       </div>
-    </div>
+    </header>
+
+    <!-- CONTENIDO -->
+    <main class="flex-1 flex items-center justify-center">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6 md:p-10 w-full max-w-7xl"
+      >
+        <!-- GRAFOS -->
+        <button
+          onclick="window.location.href = 'Grafos.html'"
+          class="card bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm mx-auto hover:bg-blue-600 hover:text-white group"
+        >
+          <div class="flex justify-center mb-6">
+            <i data-lucide="network" class="w-14 h-14 md:w-16 md:h-16"></i>
+          </div>
+
+          <h2 class="text-xl md:text-2xl font-bold text-center mb-3">GRAFOS</h2>
+
+          <p
+            class="text-sm md:text-base text-center text-gray-500 group-hover:text-white"
+          >
+            Construcción y análisis de grafos, rutas críticas, árboles de
+            expansión y redes de proyectos.
+          </p>
+        </button>
+
+        <!-- TIEMPO ESTÁNDAR -->
+        <button
+          class="card bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm mx-auto hover:bg-emerald-600 hover:text-white group"
+        >
+          <div class="flex justify-center mb-6">
+            <i data-lucide="timer" class="w-14 h-14 md:w-16 md:h-16"></i>
+          </div>
+
+          <h2 class="text-xl md:text-2xl font-bold text-center mb-3">
+            TIEMPO ESTÁNDAR
+          </h2>
+
+          <p
+            class="text-sm md:text-base text-center text-gray-500 group-hover:text-white"
+          >
+            Cálculo del tiempo normal, suplementos, valoración del operario y
+            tiempo estándar.
+          </p>
+        </button>
+
+        <!-- HOMBRE MÁQUINA -->
+        <button
+          class="card bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm mx-auto hover:bg-orange-500 hover:text-white group"
+        >
+          <div class="flex justify-center mb-6">
+            <i data-lucide="factory" class="w-14 h-14 md:w-16 md:h-16"></i>
+          </div>
+
+          <h2 class="text-xl md:text-2xl font-bold text-center mb-3">
+            DIAGRAMA HOMBRE-MÁQUINA
+          </h2>
+
+          <p
+            class="text-sm md:text-base text-center text-gray-500 group-hover:text-white"
+          >
+            Elaboración y análisis del diagrama Hombre-Máquina para optimizar la
+            utilización de recursos.
+          </p>
+        </button>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer
+      class="bg-slate-900 text-slate-400 text-center py-5 px-4 text-sm md:text-base"
+    >
+      Ingeniería de Métodos © 2026
+    </footer>
 
     <script>
-      const nodes = [],
-        edges = [],
-        pos = {};
-      let drag = null;
-      function addNode() {
-        let n = nodeName.value.trim().toUpperCase();
-        if (!n || nodes.includes(n)) return;
-        nodes.push(n);
-        pos[n] = {
-          x: 350 + 220 * Math.cos(nodes.length),
-          y: 300 + 220 * Math.sin(nodes.length),
-        };
-        nodeName.value = "";
-        refresh();
-        redraw();
-      }
-      function refresh() {
-        fromNode.innerHTML = "";
-        toNode.innerHTML = "";
-        nodes.forEach((n) => {
-          fromNode.innerHTML += `<option>${n}</option>`;
-          toNode.innerHTML += `<option>${n}</option>`;
-        });
-        nodesList.textContent = nodes.join(", ") || "-";
-        edgesList.innerHTML = edges
-          .map((e) => `<li>${e.from} ↔ ${e.to} (${e.weight})</li>`)
-          .join("");
-      }
-      function addEdge() {
-        let w = parseInt(weight.value);
-        if (
-          !fromNode.value ||
-          !toNode.value ||
-          fromNode.value === toNode.value ||
-          isNaN(w)
-        )
-          return;
-        edges.push({ from: fromNode.value, to: toNode.value, weight: w });
-        weight.value = "";
-        refresh();
-        redraw();
-      }
-      class UF {
-        constructor(a) {
-          this.p = {};
-          a.forEach((x) => (this.p[x] = x));
-        }
-        f(x) {
-          return this.p[x] == x ? x : (this.p[x] = this.f(this.p[x]));
-        }
-        u(a, b) {
-          this.p[this.f(a)] = this.f(b);
-        }
-      }
-      function kr(max = false) {
-        let uf = new UF(nodes),
-          r = [],
-          t = 0;
-        [...edges]
-          .sort((a, b) => (max ? b.weight - a.weight : a.weight - b.weight))
-          .forEach((e) => {
-            if (uf.f(e.from) != uf.f(e.to)) {
-              uf.u(e.from, e.to);
-              r.push(e);
-              t += e.weight;
-            }
-          });
-        return { edges: r, total: t };
-      }
-      function draw(id, arr) {
-        let c = document.getElementById(id),
-          ctx = c.getContext("2d");
-        ctx.clearRect(0, 0, c.width, c.height);
-        ctx.lineWidth = 2;
-        arr.forEach((e) => {
-          let a = pos[e.from],
-            b = pos[e.to];
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y * (c.height / 600));
-          ctx.lineTo(b.x, b.y * (c.height / 600));
-          ctx.stroke();
-          let mx = (a.x + b.x) / 2,
-            my = ((a.y + b.y) / 2) * (c.height / 600);
-          ctx.beginPath();
-          ctx.arc(mx, my, 12, 0, Math.PI * 2);
-          ctx.fillStyle = "white";
-          ctx.fill();
-          ctx.stroke();
-          ctx.fillStyle = "red";
-          ctx.font = "bold 14px Arial";
-          ctx.textAlign = "center";
-          ctx.fillText(e.weight, mx, my + 5);
-        });
-        nodes.forEach((n) => {
-          let p = pos[n],
-            y = p.y * (c.height / 600);
-          ctx.beginPath();
-          ctx.arc(p.x, y, 18, 0, Math.PI * 2);
-          ctx.fillStyle = "#2563eb";
-          ctx.fill();
-          ctx.stroke();
-          ctx.fillStyle = "white";
-          ctx.font = "bold 14px Arial";
-          ctx.textAlign = "center";
-          ctx.fillText(n, p.x, y + 5);
-        });
-      }
-      function calculateTrees() {
-        let mst = kr(false),
-          max = kr(true);
-        draw("mstCanvas", mst.edges);
-        draw("maxCanvas", max.edges);
-        mstInfo.innerHTML = "<b>MST:</b> " + mst.total;
-        maxInfo.innerHTML = "<b>MaxST:</b> " + max.total;
-      }
-      function redraw() {
-        draw("graphCanvas", edges);
-        calculateTrees();
-      }
-      function clearAll() {
-        nodes.length = 0;
-        edges.length = 0;
-        for (let k in pos) delete pos[k];
-        refresh();
-        redraw();
-        mstInfo.innerHTML = "";
-        maxInfo.innerHTML = "";
-      }
-      const cv = document.getElementById("graphCanvas");
-      cv.onmousedown = (e) => {
-        let r = cv.getBoundingClientRect(),
-          x = e.clientX - r.left,
-          y = e.clientY - r.top;
-        for (let n of nodes) {
-          if (Math.hypot(x - pos[n].x, y - pos[n].y) < 18) {
-            drag = n;
-            break;
-          }
-        }
-      };
-      cv.onmousemove = (e) => {
-        if (!drag) return;
-        let r = cv.getBoundingClientRect();
-        pos[drag] = { x: e.clientX - r.left, y: e.clientY - r.top };
-        redraw();
-      };
-      window.onmouseup = () => (drag = null);
+      lucide.createIcons();
     </script>
   </body>
 </html>
